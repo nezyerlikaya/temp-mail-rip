@@ -27,6 +27,7 @@ class ModuleStructureTest extends TestCase
     {
         $modulesPath = dirname(__DIR__, 2).DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'Modules';
         $allowedSecurityDirectories = ['Http', 'Logging', 'Services'];
+        $allowedSettingsDirectories = ['DTOs', 'Enums', 'Exceptions', 'Repositories', 'Services'];
 
         $this->assertDirectoryExists($modulesPath);
 
@@ -40,6 +41,12 @@ class ModuleStructureTest extends TestCase
 
             if ($module === 'Security') {
                 $this->assertSame($allowedSecurityDirectories, $children);
+
+                continue;
+            }
+
+            if ($module === 'Settings') {
+                $this->assertSame($allowedSettingsDirectories, $children);
 
                 continue;
             }
