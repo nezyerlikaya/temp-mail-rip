@@ -29,6 +29,8 @@ class ModuleStructureTest extends TestCase
         $allowedSecurityDirectories = ['Http', 'Logging', 'Services'];
         $allowedSettingsDirectories = ['DTOs', 'Enums', 'Exceptions', 'Repositories', 'Services'];
         $allowedFeatureFlagDirectories = ['DTOs', 'Enums', 'Exceptions', 'Services'];
+        $allowedLocalizationDirectories = ['DTOs', 'Enums', 'Exceptions', 'Services'];
+        $allowedTranslationDirectories = ['DTOs', 'Enums', 'Exceptions', 'Services'];
 
         $this->assertDirectoryExists($modulesPath);
 
@@ -54,6 +56,18 @@ class ModuleStructureTest extends TestCase
 
             if ($module === 'FeatureFlags') {
                 $this->assertSame($allowedFeatureFlagDirectories, $children);
+
+                continue;
+            }
+
+            if ($module === 'Localization') {
+                $this->assertSame($allowedLocalizationDirectories, $children);
+
+                continue;
+            }
+
+            if ($module === 'Translation') {
+                $this->assertSame($allowedTranslationDirectories, $children);
 
                 continue;
             }
