@@ -38,6 +38,14 @@ use App\Modules\Settings\Repositories\SettingsRepository;
 use App\Modules\Settings\Services\SettingsDefinitionProvider;
 use App\Modules\Settings\Services\SettingsRegistry;
 use App\Modules\Settings\Services\SettingsResolver;
+use App\Modules\SystemHealth\Services\DegradedStateResolver;
+use App\Modules\SystemHealth\Services\HealthCheckDefinitionProvider;
+use App\Modules\SystemHealth\Services\HealthCheckRegistry;
+use App\Modules\SystemHealth\Services\HealthCheckRunner;
+use App\Modules\SystemHealth\Services\HealthResultFactory;
+use App\Modules\SystemHealth\Services\HealthSummaryResolver;
+use App\Modules\SystemHealth\Services\SchedulerHeartbeat;
+use App\Modules\SystemHealth\Services\SystemHealthSettingsDefinitionProvider;
 use App\Modules\Theme\Services\ThemeDefinitionProvider;
 use App\Modules\Theme\Services\ThemeRegistry;
 use App\Modules\Theme\Services\ThemeResolver;
@@ -69,6 +77,13 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(SettingsRepository::class);
         $this->app->singleton(SettingsDefinitionProvider::class);
         $this->app->singleton(SettingsResolver::class);
+        $this->app->singleton(SystemHealthSettingsDefinitionProvider::class);
+        $this->app->singleton(HealthResultFactory::class);
+        $this->app->singleton(HealthCheckDefinitionProvider::class);
+        $this->app->singleton(HealthCheckRunner::class);
+        $this->app->singleton(HealthSummaryResolver::class);
+        $this->app->singleton(DegradedStateResolver::class);
+        $this->app->singleton(SchedulerHeartbeat::class);
         $this->app->singleton(FeatureFlagDefinitionProvider::class);
         $this->app->singleton(FeatureFlagSettingsDefinitionProvider::class);
         $this->app->singleton(FeatureFlagResolver::class);
@@ -107,6 +122,16 @@ class AppServiceProvider extends ServiceProvider
             $registry = new FeatureFlagRegistry;
 
             foreach ($app->make(FeatureFlagDefinitionProvider::class)->definitions() as $definition) {
+                $registry->register($definition);
+            }
+
+            return $registry;
+        });
+
+        $this->app->singleton(HealthCheckRegistry::class, function ($app): HealthCheckRegistry {
+            $registry = new HealthCheckRegistry;
+
+            foreach ($app->make(HealthCheckDefinitionProvider::class)->definitions() as $definition) {
                 $registry->register($definition);
             }
 
@@ -213,6 +238,10 @@ class AppServiceProvider extends ServiceProvider
             }
 
             foreach ($app->make(EmailTemplateSettingsDefinitionProvider::class)->definitions() as $definition) {
+                $registry->register($definition);
+            }
+
+            foreach ($app->make(SystemHealthSettingsDefinitionProvider::class)->definitions() as $definition) {
                 $registry->register($definition);
             }
 
