@@ -23,9 +23,10 @@ class ModuleStructureTest extends TestCase
         'SystemHealth',
     ];
 
-    public function test_foundation_modules_are_prepared_without_business_subdirectories(): void
+    public function test_foundation_modules_are_prepared_without_unowned_business_subdirectories(): void
     {
         $modulesPath = dirname(__DIR__, 2).DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'Modules';
+        $allowedSecurityDirectories = ['Http', 'Logging', 'Services'];
 
         $this->assertDirectoryExists($modulesPath);
 
@@ -37,7 +38,13 @@ class ModuleStructureTest extends TestCase
 
             $children = array_values(array_diff(scandir($modulePath) ?: [], ['.', '..', 'README.md']));
 
-            $this->assertSame([], $children, "The {$module} module should not contain business files in STEP001.");
+            if ($module === 'Security') {
+                $this->assertSame($allowedSecurityDirectories, $children);
+
+                continue;
+            }
+
+            $this->assertSame([], $children, "The {$module} module should not contain business files before its scoped prompt.");
         }
     }
 
