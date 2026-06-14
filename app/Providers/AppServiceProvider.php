@@ -2,6 +2,12 @@
 
 namespace App\Providers;
 
+use App\Modules\Compliance\Repositories\LegalDocumentRepository;
+use App\Modules\Compliance\Services\LegalContentSanitizer;
+use App\Modules\Compliance\Services\LegalDocumentDefinitionProvider;
+use App\Modules\Compliance\Services\LegalDocumentRegistry;
+use App\Modules\Compliance\Services\LegalDocumentResolver;
+use App\Modules\Compliance\Services\LegalSettingsDefinitionProvider;
 use App\Modules\FeatureFlags\Services\FeatureFlagDefinitionProvider;
 use App\Modules\FeatureFlags\Services\FeatureFlagRegistry;
 use App\Modules\FeatureFlags\Services\FeatureFlagResolver;
@@ -15,6 +21,11 @@ use App\Modules\Localization\Services\LocaleNormalizer;
 use App\Modules\Localization\Services\LocaleRegistry;
 use App\Modules\Localization\Services\LocaleResolver;
 use App\Modules\Localization\Services\LocalizationSettingsDefinitionProvider;
+use App\Modules\Mail\Services\EmailPlaceholderRenderer;
+use App\Modules\Mail\Services\EmailTemplateDefinitionProvider;
+use App\Modules\Mail\Services\EmailTemplateRegistry;
+use App\Modules\Mail\Services\EmailTemplateResolver;
+use App\Modules\Mail\Services\EmailTemplateSettingsDefinitionProvider;
 use App\Modules\Navigation\Services\NavigationDefinitionProvider;
 use App\Modules\Navigation\Services\NavigationRegistry;
 use App\Modules\Navigation\Services\NavigationResolver;
@@ -62,6 +73,15 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(FeatureFlagSettingsDefinitionProvider::class);
         $this->app->singleton(FeatureFlagResolver::class);
         $this->app->singleton(RolloutEvaluator::class);
+        $this->app->singleton(LegalDocumentDefinitionProvider::class);
+        $this->app->singleton(LegalSettingsDefinitionProvider::class);
+        $this->app->singleton(LegalDocumentRepository::class);
+        $this->app->singleton(LegalContentSanitizer::class);
+        $this->app->singleton(LegalDocumentResolver::class);
+        $this->app->singleton(EmailTemplateDefinitionProvider::class);
+        $this->app->singleton(EmailTemplateSettingsDefinitionProvider::class);
+        $this->app->singleton(EmailPlaceholderRenderer::class);
+        $this->app->singleton(EmailTemplateResolver::class);
         $this->app->singleton(InstallationLock::class);
         $this->app->singleton(InstallationStateDetector::class);
         $this->app->singleton(PreflightChecker::class);
@@ -87,6 +107,26 @@ class AppServiceProvider extends ServiceProvider
             $registry = new FeatureFlagRegistry;
 
             foreach ($app->make(FeatureFlagDefinitionProvider::class)->definitions() as $definition) {
+                $registry->register($definition);
+            }
+
+            return $registry;
+        });
+
+        $this->app->singleton(LegalDocumentRegistry::class, function ($app): LegalDocumentRegistry {
+            $registry = new LegalDocumentRegistry;
+
+            foreach ($app->make(LegalDocumentDefinitionProvider::class)->definitions() as $definition) {
+                $registry->register($definition);
+            }
+
+            return $registry;
+        });
+
+        $this->app->singleton(EmailTemplateRegistry::class, function ($app): EmailTemplateRegistry {
+            $registry = new EmailTemplateRegistry;
+
+            foreach ($app->make(EmailTemplateDefinitionProvider::class)->definitions() as $definition) {
                 $registry->register($definition);
             }
 
@@ -165,6 +205,14 @@ class AppServiceProvider extends ServiceProvider
             }
 
             foreach ($app->make(UploadSettingsDefinitionProvider::class)->definitions() as $definition) {
+                $registry->register($definition);
+            }
+
+            foreach ($app->make(LegalSettingsDefinitionProvider::class)->definitions() as $definition) {
+                $registry->register($definition);
+            }
+
+            foreach ($app->make(EmailTemplateSettingsDefinitionProvider::class)->definitions() as $definition) {
                 $registry->register($definition);
             }
 

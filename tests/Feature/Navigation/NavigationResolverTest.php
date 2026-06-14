@@ -14,11 +14,13 @@ class NavigationResolverTest extends TestCase
     {
         $items = app(NavigationResolver::class)->resolve('public', 'tr', 'home');
 
-        $this->assertCount(1, $items);
+        $this->assertCount(5, $items);
         $this->assertSame('public.home', $items[0]->key);
         $this->assertSame('Ana sayfa', $items[0]->label);
         $this->assertSame(url('/'), $items[0]->url);
         $this->assertTrue($items[0]->active);
+        $this->assertSame('public.legal.privacy_policy', $items[1]->key);
+        $this->assertSame('Gizlilik', $items[1]->label);
     }
 
     public function test_feature_flags_can_hide_navigation_without_granting_access(): void
@@ -30,7 +32,12 @@ class NavigationResolverTest extends TestCase
 
         $items = app(NavigationResolver::class)->resolve('public', 'en', 'home');
 
-        $this->assertSame([], $items);
+        $this->assertSame([
+            'public.legal.privacy_policy',
+            'public.legal.terms_of_service',
+            'public.legal.cookie_policy',
+            'public.legal.acceptable_use_policy',
+        ], array_map(fn (ResolvedNavigationItem $item): string => $item->key, $items));
     }
 
     public function test_navigation_component_escapes_labels(): void
