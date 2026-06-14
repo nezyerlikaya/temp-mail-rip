@@ -12,6 +12,9 @@ use App\Modules\Localization\Services\LocaleNormalizer;
 use App\Modules\Localization\Services\LocaleRegistry;
 use App\Modules\Localization\Services\LocaleResolver;
 use App\Modules\Localization\Services\LocalizationSettingsDefinitionProvider;
+use App\Modules\Navigation\Services\NavigationDefinitionProvider;
+use App\Modules\Navigation\Services\NavigationRegistry;
+use App\Modules\Navigation\Services\NavigationResolver;
 use App\Modules\Security\Logging\SanitizedLogProcessor;
 use App\Modules\Security\Services\PathAnonymizer;
 use App\Modules\Security\Services\SafeDiagnosticsFormatter;
@@ -21,6 +24,10 @@ use App\Modules\Settings\Repositories\SettingsRepository;
 use App\Modules\Settings\Services\SettingsDefinitionProvider;
 use App\Modules\Settings\Services\SettingsRegistry;
 use App\Modules\Settings\Services\SettingsResolver;
+use App\Modules\Theme\Services\ThemeDefinitionProvider;
+use App\Modules\Theme\Services\ThemeRegistry;
+use App\Modules\Theme\Services\ThemeResolver;
+use App\Modules\Theme\Services\ThemeSettingsDefinitionProvider;
 use App\Modules\Translation\Services\TranslationDefinitionProvider;
 use App\Modules\Translation\Services\TranslationNamespaceRegistry;
 use App\Modules\Translation\Services\TranslationResolver;
@@ -53,6 +60,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(TranslationDefinitionProvider::class);
         $this->app->singleton(TranslationValueProvider::class);
         $this->app->singleton(TranslationResolver::class);
+        $this->app->singleton(NavigationDefinitionProvider::class);
+        $this->app->singleton(NavigationResolver::class);
+        $this->app->singleton(ThemeDefinitionProvider::class);
+        $this->app->singleton(ThemeSettingsDefinitionProvider::class);
+        $this->app->singleton(ThemeResolver::class);
 
         $this->app->singleton(FeatureFlagRegistry::class, function ($app): FeatureFlagRegistry {
             $registry = new FeatureFlagRegistry;
@@ -84,6 +96,28 @@ class AppServiceProvider extends ServiceProvider
             return $registry;
         });
 
+        $this->app->singleton(NavigationRegistry::class, function ($app): NavigationRegistry {
+            $registry = new NavigationRegistry;
+
+            foreach ($app->make(NavigationDefinitionProvider::class)->definitions() as $definition) {
+                $registry->register($definition);
+            }
+
+            $registry->validate();
+
+            return $registry;
+        });
+
+        $this->app->singleton(ThemeRegistry::class, function ($app): ThemeRegistry {
+            $registry = new ThemeRegistry;
+
+            foreach ($app->make(ThemeDefinitionProvider::class)->definitions() as $definition) {
+                $registry->register($definition);
+            }
+
+            return $registry;
+        });
+
         $this->app->singleton(SettingsRegistry::class, function ($app): SettingsRegistry {
             $registry = new SettingsRegistry;
 
@@ -96,6 +130,10 @@ class AppServiceProvider extends ServiceProvider
             }
 
             foreach ($app->make(LocalizationSettingsDefinitionProvider::class)->definitions() as $definition) {
+                $registry->register($definition);
+            }
+
+            foreach ($app->make(ThemeSettingsDefinitionProvider::class)->definitions() as $definition) {
                 $registry->register($definition);
             }
 
