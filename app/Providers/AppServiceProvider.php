@@ -2,6 +2,11 @@
 
 namespace App\Providers;
 
+use App\Modules\FeatureFlags\Services\FeatureFlagDefinitionProvider;
+use App\Modules\FeatureFlags\Services\FeatureFlagRegistry;
+use App\Modules\FeatureFlags\Services\FeatureFlagResolver;
+use App\Modules\FeatureFlags\Services\FeatureFlagSettingsDefinitionProvider;
+use App\Modules\FeatureFlags\Services\RolloutEvaluator;
 use App\Modules\Security\Logging\SanitizedLogProcessor;
 use App\Modules\Security\Services\PathAnonymizer;
 use App\Modules\Security\Services\SafeDiagnosticsFormatter;
@@ -28,11 +33,29 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(SettingsRepository::class);
         $this->app->singleton(SettingsDefinitionProvider::class);
         $this->app->singleton(SettingsResolver::class);
+        $this->app->singleton(FeatureFlagDefinitionProvider::class);
+        $this->app->singleton(FeatureFlagSettingsDefinitionProvider::class);
+        $this->app->singleton(FeatureFlagResolver::class);
+        $this->app->singleton(RolloutEvaluator::class);
+
+        $this->app->singleton(FeatureFlagRegistry::class, function ($app): FeatureFlagRegistry {
+            $registry = new FeatureFlagRegistry;
+
+            foreach ($app->make(FeatureFlagDefinitionProvider::class)->definitions() as $definition) {
+                $registry->register($definition);
+            }
+
+            return $registry;
+        });
 
         $this->app->singleton(SettingsRegistry::class, function ($app): SettingsRegistry {
             $registry = new SettingsRegistry;
 
             foreach ($app->make(SettingsDefinitionProvider::class)->definitions() as $definition) {
+                $registry->register($definition);
+            }
+
+            foreach ($app->make(FeatureFlagSettingsDefinitionProvider::class)->definitions() as $definition) {
                 $registry->register($definition);
             }
 
