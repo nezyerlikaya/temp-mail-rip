@@ -33,6 +33,7 @@ class ModuleStructureTest extends TestCase
         $allowedTranslationDirectories = ['DTOs', 'Enums', 'Exceptions', 'Services'];
         $allowedNavigationDirectories = ['DTOs', 'Exceptions', 'Services'];
         $allowedThemeDirectories = ['DTOs', 'Exceptions', 'Services'];
+        $allowedAdminDirectories = ['Http'];
 
         $this->assertDirectoryExists($modulesPath);
 
@@ -82,6 +83,12 @@ class ModuleStructureTest extends TestCase
 
             if ($module === 'Theme') {
                 $this->assertSame($allowedThemeDirectories, $children);
+
+                continue;
+            }
+
+            if ($module === 'Admin') {
+                $this->assertSame($allowedAdminDirectories, $children);
 
                 continue;
             }

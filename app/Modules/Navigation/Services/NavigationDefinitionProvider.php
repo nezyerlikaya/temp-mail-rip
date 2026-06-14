@@ -22,6 +22,15 @@ class NavigationDefinitionProvider
                 featureFlag: 'platform.public_app',
                 activeRoutePatterns: ['home'],
             ),
+            new NavigationItemDefinition(
+                key: 'admin.dashboard',
+                labelKey: 'admin.navigation.dashboard',
+                routeName: 'admin.dashboard',
+                area: 'admin',
+                order: 10,
+                icon: 'layout-dashboard',
+                activeRoutePatterns: ['admin.dashboard'],
+            ),
         ];
     }
 }
