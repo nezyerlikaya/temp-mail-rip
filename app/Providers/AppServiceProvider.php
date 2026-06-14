@@ -35,6 +35,12 @@ use App\Modules\Translation\Services\TranslationDefinitionProvider;
 use App\Modules\Translation\Services\TranslationNamespaceRegistry;
 use App\Modules\Translation\Services\TranslationResolver;
 use App\Modules\Translation\Services\TranslationValueProvider;
+use App\Modules\Uploads\Services\FilenameNormalizer;
+use App\Modules\Uploads\Services\UploadPathGenerator;
+use App\Modules\Uploads\Services\UploadScopeDefinitionProvider;
+use App\Modules\Uploads\Services\UploadScopeRegistry;
+use App\Modules\Uploads\Services\UploadSettingsDefinitionProvider;
+use App\Modules\Uploads\Services\UploadValidator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -71,6 +77,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ThemeDefinitionProvider::class);
         $this->app->singleton(ThemeSettingsDefinitionProvider::class);
         $this->app->singleton(ThemeResolver::class);
+        $this->app->singleton(FilenameNormalizer::class);
+        $this->app->singleton(UploadPathGenerator::class);
+        $this->app->singleton(UploadScopeDefinitionProvider::class);
+        $this->app->singleton(UploadSettingsDefinitionProvider::class);
+        $this->app->singleton(UploadValidator::class);
 
         $this->app->singleton(FeatureFlagRegistry::class, function ($app): FeatureFlagRegistry {
             $registry = new FeatureFlagRegistry;
@@ -124,6 +135,16 @@ class AppServiceProvider extends ServiceProvider
             return $registry;
         });
 
+        $this->app->singleton(UploadScopeRegistry::class, function ($app): UploadScopeRegistry {
+            $registry = new UploadScopeRegistry;
+
+            foreach ($app->make(UploadScopeDefinitionProvider::class)->definitions() as $definition) {
+                $registry->register($definition);
+            }
+
+            return $registry;
+        });
+
         $this->app->singleton(SettingsRegistry::class, function ($app): SettingsRegistry {
             $registry = new SettingsRegistry;
 
@@ -140,6 +161,10 @@ class AppServiceProvider extends ServiceProvider
             }
 
             foreach ($app->make(ThemeSettingsDefinitionProvider::class)->definitions() as $definition) {
+                $registry->register($definition);
+            }
+
+            foreach ($app->make(UploadSettingsDefinitionProvider::class)->definitions() as $definition) {
                 $registry->register($definition);
             }
 
