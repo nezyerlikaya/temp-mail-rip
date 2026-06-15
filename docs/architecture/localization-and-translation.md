@@ -1,6 +1,6 @@
 # Localization And Translation
 
-Localization owns locale context and resolution. Translation owns key-based UI and system text. Long-form content translations for Blog, Knowledge Base, Documentation, legal documents, SEO, search, and sitemap remain outside STEP005 and belong to their future content owners.
+Localization owns locale context and resolution. Translation owns key-based UI and system text. Long-form content translations for Blog, Knowledge Base, Documentation, legal documents, SEO, search, and sitemap remain outside STEP005 and belong to their content owner modules.
 
 ## Locale Standard
 
@@ -22,7 +22,7 @@ Existing unavailable preferences safely fall back through the resolver.
 Locale resolution uses:
 
 1. Validated route locale
-2. Authenticated user preference supplied by future Auth/Profile integration
+2. Authenticated user preference supplied by Auth/Profile integration when available
 3. Validated locale cookie
 4. Bounded `Accept-Language` parsing
 5. System default locale
@@ -37,7 +37,7 @@ Locale route parameters are validated centrally by `LocaleResolver::validateRout
 
 Translations use canonical keys such as `auth.login` and `mailboxes.create.success`. The namespace is the first segment and ownership is registered in `TranslationNamespaceRegistry`.
 
-Stable application strings use registry/file-style providers in STEP005. Database-backed translation tables are not introduced until runtime management is genuinely required. If database storage is later approved, file/provider values must remain the lower-precedence stable source unless documented otherwise.
+Stable application strings use registry/file-style providers in STEP005. Database-backed translation tables are introduced only when runtime management is genuinely required. If database storage is approved, file/provider values must remain the lower-precedence stable source unless documented otherwise.
 
 ## Fallback
 

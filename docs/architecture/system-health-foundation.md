@@ -6,7 +6,7 @@ STEP011 introduces a lightweight System Health module for internal readiness che
 
 System Health owns local health check registration, lightweight readiness checks, degraded-state detection, safe result formatting, scheduler/cron readiness, and internal health summaries.
 
-Monitoring later consumes sanitized results and owns alert rules and delivery. Public Status later owns public-safe component output. Audit Center later owns audit records. Analytics is not used for health in v1.
+Monitoring consumes sanitized results and owns alert rules and delivery. Public Status owns public-safe component output. Audit Center owns audit records. Analytics is not used for health in v1.
 
 ## Registry
 
@@ -43,7 +43,7 @@ Recommended shared-hosting cron:
 */5 * * * * cd /path/to/app && php artisan health:scheduler-heartbeat >> /dev/null 2>&1
 ```
 
-Future scheduled jobs may call `SchedulerHeartbeat::record()` from the scheduler itself once real scheduled tasks exist.
+Scheduled jobs may call `SchedulerHeartbeat::record()` from the scheduler itself once real scheduled tasks exist.
 
 ## Settings
 
@@ -62,4 +62,4 @@ The cache availability check performs a short-lived write/read/delete probe with
 
 ## Shared Hosting
 
-The foundation requires no daemon, Redis, external monitoring SaaS, process control, shell access from public requests, or network scans. Checks are intended for internal commands and future internal consumers, not repeated heavy public request work.
+The foundation requires no daemon, Redis, external monitoring SaaS, process control, shell access from public requests, or network scans. Checks are intended for internal commands and internal consumers, not repeated heavy public request work.

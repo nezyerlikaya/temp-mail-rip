@@ -1,5 +1,6 @@
 <?php
 
+use App\Modules\DomainHealth\Services\DomainHealthBatchChecker;
 use App\Modules\SystemHealth\Services\HealthSummaryResolver;
 use App\Modules\SystemHealth\Services\SchedulerHeartbeat;
 use Illuminate\Foundation\Inspiring;
@@ -42,3 +43,12 @@ Artisan::command('health:scheduler-heartbeat', function (SchedulerHeartbeat $hea
 
     return 0;
 })->purpose('Record a scheduler heartbeat for shared-hosting cron readiness');
+
+Artisan::command('domain-health:check {--limit= : Maximum domains to check in this bounded run}', function (DomainHealthBatchChecker $checker): int {
+    $limit = $this->option('limit') !== null ? max(1, (int) $this->option('limit')) : null;
+    $snapshots = $checker->run($limit);
+
+    $this->info('Domain health checked: '.count($snapshots));
+
+    return 0;
+})->purpose('Run a bounded, cron-compatible domain health batch');

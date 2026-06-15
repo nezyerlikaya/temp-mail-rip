@@ -29,6 +29,8 @@ class InstallerRouteTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Installer preflight');
+        $response->assertSee('does not collect database credentials');
+        $response->assertSee('Lock installer routes');
         $response->assertDontSee('DB_PASSWORD');
         $response->assertDontSee(base_path());
         $response->assertHeader('X-Content-Type-Options', 'nosniff');
@@ -48,6 +50,7 @@ class InstallerRouteTest extends TestCase
 
         $response->assertStatus(423);
         $response->assertSee('Installer locked');
+        $response->assertSee('does not mean database credentials were entered');
     }
 
     public function test_lock_action_is_post_only_and_form_contains_csrf_token(): void

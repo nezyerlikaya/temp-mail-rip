@@ -73,12 +73,14 @@ Docs-first: read `docs/roadmap/v1-scope-cleanup-rules.md`, `docs/roadmap/00-exec
 051. Basic Indexed Search Foundation. Docs: cleanup rules, ownership matrix.
 052. Localization Verification For Content And SEO. Docs: cleanup rules, ownership matrix.
 
-## Phase 5 - Operations And Launch
+## Phase 5 - Public Homepage Experience
 
-053. Monitoring, Audit, Public Status, Compliance, Backup, Disaster Recovery, Production Hardening, Launch Readiness, And Platform Certification. Docs: cleanup rules, ownership matrix.
+053. Atlas Homepage Theme And Appearance Foundation. Docs: cleanup rules, ownership matrix, navigation/theme architecture, product quality checklist.
+054. Horizon Homepage Theme And Mailbox Experience. Docs: cleanup rules, ownership matrix, navigation/theme architecture, product quality checklist.
+055. Legacy Homepage Theme And Final Homepage Verification. Docs: cleanup rules, ownership matrix, navigation/theme architecture, product quality checklist.
 
 ## Notes
 
-The final prompt count is 53, not 55, because removed systems and duplicated foundations were merged more aggressively. Do not add filler prompts to reach a round number.
+The final prompt count is 55. STEP053-STEP055 are intentional product-experience prompts for Atlas, Horizon, and Legacy. They are not filler prompts.
 
 Removed raw prompts: Community Foundation, SDK Foundation, Integration Marketplace Foundation. Removed feature traces: AI translation, semantic/AI search, advanced analytics.

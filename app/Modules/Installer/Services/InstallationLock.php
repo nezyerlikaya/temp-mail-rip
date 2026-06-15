@@ -11,7 +11,17 @@ class InstallationLock
 
     public function locked(): bool
     {
+        return is_file($this->path()) && $this->environmentFileExists();
+    }
+
+    public function lockFileExists(): bool
+    {
         return is_file($this->path());
+    }
+
+    public function environmentFileExists(): bool
+    {
+        return is_file(base_path('.env'));
     }
 
     public function create(): void

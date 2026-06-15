@@ -26,7 +26,7 @@ Admin consumes:
 - Theme Resolver for `data-theme`
 - Security headers from the global security middleware
 
-Hidden navigation is not authorization. Future admin actions must still use server-side authorization.
+Hidden navigation is not authorization. Admin actions must use server-side authorization when their owning modules introduce state-changing behavior.
 
 ## Security And Accessibility
 

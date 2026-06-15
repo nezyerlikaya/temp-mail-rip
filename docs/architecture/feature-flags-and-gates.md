@@ -52,7 +52,7 @@ Rollout does not implement plans, subscriptions, reputation, groups, marketplace
 
 ## Cache Strategy
 
-Resolved results are cached per flag and per rollout-subject hash for a short duration. There is no global flag blob. Runtime state updates use Settings cache invalidation; callers may also forget a flag resolution key when mutating flag state through future authorized services.
+Resolved results are cached per flag and per rollout-subject hash for a short duration. There is no global flag blob. Runtime state updates use Settings cache invalidation; authorized mutation services may also forget a flag resolution key when changing flag state.
 
 Cache failure uses safe behavior. Fail-closed flags become unavailable. Explicit fail-open decisions must be documented on the flag definition, such as keeping the existing public application shell available if cache resolution fails.
 

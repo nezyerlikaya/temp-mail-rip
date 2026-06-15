@@ -8,6 +8,17 @@ use App\Modules\Compliance\Services\LegalDocumentDefinitionProvider;
 use App\Modules\Compliance\Services\LegalDocumentRegistry;
 use App\Modules\Compliance\Services\LegalDocumentResolver;
 use App\Modules\Compliance\Services\LegalSettingsDefinitionProvider;
+use App\Modules\DomainHealth\Repositories\DomainHealthRepository;
+use App\Modules\DomainHealth\Services\DnsReadinessResolver;
+use App\Modules\DomainHealth\Services\DomainHealthBatchChecker;
+use App\Modules\DomainHealth\Services\DomainHealthChecker;
+use App\Modules\DomainHealth\Services\DomainHealthSettingsDefinitionProvider;
+use App\Modules\DomainHealth\Services\DomainHealthStatusCalculator;
+use App\Modules\Domains\Repositories\DomainRepository;
+use App\Modules\Domains\Services\DomainInventory;
+use App\Modules\Domains\Services\DomainNormalizer;
+use App\Modules\Domains\Services\DomainNotesPolicy;
+use App\Modules\Domains\Services\DomainSettingsDefinitionProvider;
 use App\Modules\FeatureFlags\Services\FeatureFlagDefinitionProvider;
 use App\Modules\FeatureFlags\Services\FeatureFlagRegistry;
 use App\Modules\FeatureFlags\Services\FeatureFlagResolver;
@@ -77,6 +88,17 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(SettingsRepository::class);
         $this->app->singleton(SettingsDefinitionProvider::class);
         $this->app->singleton(SettingsResolver::class);
+        $this->app->singleton(DomainSettingsDefinitionProvider::class);
+        $this->app->singleton(DomainNormalizer::class);
+        $this->app->singleton(DomainNotesPolicy::class);
+        $this->app->singleton(DomainRepository::class);
+        $this->app->singleton(DomainInventory::class);
+        $this->app->singleton(DomainHealthSettingsDefinitionProvider::class);
+        $this->app->singleton(DnsReadinessResolver::class);
+        $this->app->singleton(DomainHealthStatusCalculator::class);
+        $this->app->singleton(DomainHealthRepository::class);
+        $this->app->singleton(DomainHealthChecker::class);
+        $this->app->singleton(DomainHealthBatchChecker::class);
         $this->app->singleton(SystemHealthSettingsDefinitionProvider::class);
         $this->app->singleton(HealthResultFactory::class);
         $this->app->singleton(HealthCheckDefinitionProvider::class);
@@ -242,6 +264,14 @@ class AppServiceProvider extends ServiceProvider
             }
 
             foreach ($app->make(SystemHealthSettingsDefinitionProvider::class)->definitions() as $definition) {
+                $registry->register($definition);
+            }
+
+            foreach ($app->make(DomainSettingsDefinitionProvider::class)->definitions() as $definition) {
+                $registry->register($definition);
+            }
+
+            foreach ($app->make(DomainHealthSettingsDefinitionProvider::class)->definitions() as $definition) {
                 $registry->register($definition);
             }
 

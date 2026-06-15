@@ -74,19 +74,17 @@ This roadmap replaces the raw 72-step order. It removes out-of-scope systems, me
 7. Basic indexed search foundation.
 8. Sitemap foundation.
 
-## Phase 5 - Globalization And Operations
+## Phase 5 - Globalization And Public Homepage Experience
 
 1. Localization verification for all public/content systems.
 2. Translation verification for UI/system text.
-3. Monitoring foundation.
-4. Audit center foundation.
-5. Public status foundation.
-6. Compliance foundation.
-7. Backup foundation.
-8. Disaster recovery foundation.
-9. Production hardening.
-10. Launch readiness.
-11. Platform certification.
+3. Atlas homepage theme and Appearance foundation.
+4. Horizon homepage theme and mailbox experience.
+5. Legacy homepage theme and final homepage verification.
+
+## Operations And Launch Readiness
+
+Monitoring, audit center, public status, compliance, backup, disaster recovery, production hardening, launch readiness, and platform certification remain required product-readiness areas. They must be implemented from their owning architecture/checklist documents without conflicting with STEP053-STEP055, which are reserved for the three homepage themes.
 
 ## Merged Or Corrected Areas
 
@@ -96,6 +94,7 @@ This roadmap replaces the raw 72-step order. It removes out-of-scope systems, me
 - Monitoring/system health/public status: system health feeds monitoring; monitoring feeds public status through public-safe mapping.
 - Audit: all audit-worthy events flow through one audit center; low-value high-volume events are not audit spam.
 - Plans/subscriptions/feature gates: plans define entitlements, subscriptions activate plans, feature gates evaluate access, feature flags handle operational rollout.
+- Homepage experience: Atlas, Horizon, and Legacy are distinct compositions, not color-only skins. Appearance owns safe tokens, fonts, sections, and ads; mailbox logic remains owned by the mailbox modules.
 
 ## Removed From v1
 

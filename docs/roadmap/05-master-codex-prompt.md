@@ -29,6 +29,7 @@ Rules:
 - Constitution, roadmap, and ownership rules override the prompt if there is a conflict.
 - If required docs are missing, stop and report the missing docs. Do not invent architecture.
 - Do not build raw standalone HTML pages. Use Blade layouts, Blade components, Tailwind CSS, Alpine.js, Vite, named routes, localization keys, navigation resolution, SEO resolution where needed, and theme tokens.
+- Do not build page builders, arbitrary CSS editors, arbitrary JavaScript editors, arbitrary HTML editors, or static admin screens.
 - Keep the application modular. Do not place unrelated responsibilities in one controller, model, service, or file.
 - One owner per concept. Consume other modules through their services/resolvers/contracts; do not duplicate their data or logic.
 - No placeholder modules, future tables, future DTOs, future routes, future jobs, or compatibility layers.
@@ -39,6 +40,7 @@ Rules:
 - Do not audit low-value high-volume events. Audit privileged, security, compliance, and materially important lifecycle events.
 - Do not connect payment status to trust or reputation. Premium users do not become more trusted merely by paying.
 - Cache must include user, role, locale, plan, visibility, privacy, and route context when those affect output.
+- Public UI must follow the product quality checklist for UX, accessibility, SEO, performance, responsive behavior, RTL/LTR, error states, empty states, loading states, and admin usability.
 - Every prompt must finish with evidence: tests, command output, generated report, or a concrete verification note.
 
 Implementation behavior:

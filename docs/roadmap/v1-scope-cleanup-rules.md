@@ -14,7 +14,7 @@ This document is the cleanup filter for the corrected v1 roadmap and prompt list
 - Laravel scheduler with shared-hosting cron
 - Laravel validation, policies/gates, events, jobs, and tests
 
-Do not build raw standalone HTML pages. UI must use Blade layouts, reusable components, named routes, localization keys, navigation resolution, SEO resolution where needed, and theme tokens.
+Do not build raw standalone HTML pages. UI must use Blade layouts, reusable components, named routes, localization keys, navigation resolution, SEO resolution where needed, and theme tokens. Do not build page builders, arbitrary HTML editors, arbitrary CSS editors, arbitrary JavaScript editors, or static admin screens.
 
 ## Out Of Scope For v1
 
@@ -108,6 +108,10 @@ Every data-owning module must define its relationship to:
 ### Laravel 13 Baseline
 
 Do not assume older Laravel structures unless they exist in the project. Use current Laravel conventions for routing, middleware, service container, config, migrations, scheduling, validation, policies/gates, Blade, and tests.
+
+### Public UI Quality Baseline
+
+Public and admin screens must be modern, component-driven, accessible, responsive, and theme-token aware. Foundation screens such as the installer may be simple, but they must not look or behave like disconnected legacy HTML pages. Use the product quality checklist before declaring UI work complete.
 
 ## Final Principle
 

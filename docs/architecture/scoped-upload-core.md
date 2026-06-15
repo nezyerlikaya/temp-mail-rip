@@ -41,6 +41,6 @@ Settings keys include byte and pixel units:
 
 Invalid limits fail safely. Missing Settings use safe scope defaults.
 
-## Future Consumers
+## Integration Boundaries
 
-Avatar, Media, Contact Center, Knowledge Base, Blog, and Message Storage own their records and lifecycle. Uploads provides shared validation and safe metadata only. Public delivery requires processed safe files; private delivery requires future authorization and signed URL strategy.
+Avatar, Media, Contact Center, Knowledge Base, Blog, and Message Storage own their records and lifecycle. Uploads provides shared validation and safe metadata only. Public delivery requires processed safe files; private delivery requires authorization and signed URL strategy where private files are served.

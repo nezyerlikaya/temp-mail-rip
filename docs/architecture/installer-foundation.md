@@ -8,13 +8,17 @@ It does not own authentication, authorization, admin user creation, secret vault
 
 Installation state combines the installer lock and sanitized preflight checks. A partial installation is not complete. Recovery from interruption is manual: fix blockers, rerun preflight, and create the lock after the application is ready.
 
+The installer lock is valid only while the application environment file exists. If `.env` is removed, installation is treated as incomplete even if `storage/app/installer/installed.lock` still exists.
+
 ## Lock Behavior
 
 The lock is stored under `storage/app/installer/installed.lock`, outside the public web root. Locked installers return HTTP 423 and do not expose the lock path. Browser unlock is intentionally not implemented.
 
+The lock action must refuse to complete while blocker preflight checks remain. This prevents a broken or missing environment configuration from being marked installed.
+
 ## Preflight Checks
 
-STEP008 checks PHP version, required extensions, APP_KEY presence, debug mode, database connection, migration table readiness, storage/cache/log writability, Vite manifest presence, scheduler cron expectations, and installer lock state.
+STEP008 checks environment file presence, PHP version, required extensions, APP_KEY presence, debug mode, database connection, migration table readiness, storage/cache/log writability, Vite manifest presence, scheduler cron expectations, and installer lock state.
 
 Checks are lightweight and sanitized. They do not dump `phpinfo`, raw SQL errors, credentials, absolute paths, hostnames, usernames, stack traces, or `.env` contents.
 
@@ -29,6 +33,23 @@ The installer validates database reachability and migration status only. It does
 ## Routes And Exposure
 
 Installer routes live under `installer.*` names and `/install` URLs. State-changing lock creation uses POST and CSRF through Laravel web middleware. Routes are blocked after lock. Before authentication exists, public exposure remains a deployment risk and must be mitigated by completing the lock promptly.
+
+Until installation is complete, non-installer web pages must redirect to `/install`. JSON requests receive a safe 503 response. Installer requests must not depend on database-backed sessions because database credentials may not exist yet; installer-open requests force a file session driver before Laravel starts the session.
+
+## UI Standard
+
+Installer screens must use the shared Blade layout/component system, Tailwind CSS, theme tokens, semantic landmarks, accessible forms, visible focus states, and clear setup-step presentation. Inline foundation CSS may exist only as a temporary bridge; production installer screens should not look or behave like disconnected legacy HTML pages.
+
+Installer UI should present:
+
+- requirement checks
+- blocker/warning/ok states
+- database/session/storage readiness
+- cron/scheduler guidance
+- safe lock action
+- clear explanation of what the installer does not do
+
+It must not expose secrets, raw paths, stack traces, provider internals, or `.env` contents.
 
 ## Shared Hosting
 

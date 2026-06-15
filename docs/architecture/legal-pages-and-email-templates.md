@@ -42,7 +42,7 @@ Email templates are owned by the Mail module. STEP010 prepares system template d
 
 Statuses are `draft`, `review`, `active`, and `archived`. Only active templates are runtime-eligible. Template delivery, queued sending, provider credentials, notification preferences, newsletter systems, and billing emails are not implemented.
 
-The `email_templates` table is prepared for future runtime storage with unique `template_key + locale_code + version`. Active-template uniqueness per key and locale must be enforced by application logic when storage-backed activation is introduced.
+The `email_templates` table stores versioned template records with unique `template_key + locale_code + version`. Active-template uniqueness per key and locale must be enforced by application logic when runtime activation is enabled.
 
 ## Placeholder Contracts
 
@@ -65,6 +65,6 @@ STEP010 registers only public-safe and non-secret settings:
 
 SMTP credentials, provider API keys, tokens, reset secrets, and signed URL secrets remain outside Settings.
 
-## Future Boundaries
+## Integration Boundaries
 
-Future Compliance workflows consume legal document versions from this foundation for consent, export/deletion, and regulatory workflows. Future Notifications consume active approved templates from this foundation for delivery orchestration and preferences. Audit Center may later consume material lifecycle events such as legal document published/archived and email template activated/archived/placeholder-contract changed.
+Compliance workflows consume legal document versions from this foundation for consent, export/deletion, and regulatory workflows. Notifications consume active approved templates from this foundation for delivery orchestration and preferences. Audit Center may consume material lifecycle events such as legal document published/archived and email template activated/archived/placeholder-contract changed.

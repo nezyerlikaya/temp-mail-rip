@@ -43,4 +43,4 @@ Laravel log channels use a Monolog processor that sanitizes messages, context, a
 
 ## Frontend Security
 
-Future Blade work must use escaped output by default. Raw HTML output is prohibited unless explicitly sanitized by a scoped feature. State-changing forms must use CSRF protection and named routes. Secrets must not be emitted into HTML, Alpine state, JavaScript bundles, or data attributes.
+Blade work must use escaped output by default. Raw HTML output is prohibited unless explicitly sanitized by a scoped feature. State-changing forms must use CSRF protection and named routes. Secrets must not be emitted into HTML, Alpine state, JavaScript bundles, or data attributes.

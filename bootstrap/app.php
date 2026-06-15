@@ -1,5 +1,6 @@
 <?php
 
+use App\Modules\Installer\Http\Middleware\EnsureInstalled;
 use App\Modules\Security\Http\Middleware\SecurityHeaders;
 use App\Modules\Security\Services\SecurityExceptionMapper;
 use Illuminate\Foundation\Application;
@@ -14,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->prepend(EnsureInstalled::class);
         $middleware->append(SecurityHeaders::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

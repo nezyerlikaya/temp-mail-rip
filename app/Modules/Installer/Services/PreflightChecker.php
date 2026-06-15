@@ -20,6 +20,7 @@ class PreflightChecker
     public function run(): array
     {
         return [
+            $this->environmentFile(),
             $this->phpVersion(),
             $this->extensions(),
             $this->appKey(),
@@ -33,6 +34,13 @@ class PreflightChecker
             $this->scheduler(),
             $this->lockState(),
         ];
+    }
+
+    private function environmentFile(): PreflightCheckResult
+    {
+        return $this->lock->environmentFileExists()
+            ? $this->ok('environment.file', 'Environment file', '.env file is present.')
+            : $this->blocker('environment.file', 'Environment file', '.env file is missing. Create it from .env.example before completing installation.');
     }
 
     private function phpVersion(): PreflightCheckResult
@@ -114,6 +122,10 @@ class PreflightChecker
 
     private function lockState(): PreflightCheckResult
     {
+        if ($this->lock->lockFileExists() && ! $this->lock->environmentFileExists()) {
+            return $this->warning('installer.lock', 'Installer lock', 'Installer lock exists, but .env is missing. Installation is treated as incomplete.');
+        }
+
         return $this->lock->locked()
             ? $this->ok('installer.lock', 'Installer lock', 'Installer is locked.')
             : $this->warning('installer.lock', 'Installer lock', 'Installer is not locked yet.');
